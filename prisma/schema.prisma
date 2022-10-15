@@ -6,10 +6,34 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model countries {
+    index BigInt @id
+    country String
+    country_code String
+}
+
+model gblu {
+    index BigInt @id
+    country	String
+    flag	String
+    month_of_update	String
+    employer_action_required	String
+    legislative_update_summary	String
+    hr_area	String
+    law_in_force	String
+    new_law	String
+    impact_on_employers	String
+    more_info_1_title	String
+    more_info_2_title	String
+    more_info_3_title	String
+    more_info_1_link	String
+    more_info_1_url	String
+    more_info_2_link	String
+    more_info_2_url	String
+    more_info_3_link	String
+    more_info_3_url	String
 }
