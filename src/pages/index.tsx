@@ -5,6 +5,8 @@ import { trpc } from "../utils/trpc";
 var FileSaver = require("file-saver");
 
 const Home: NextPage = () => {
+  const { data: countries } = trpc.useQuery(["countries.getCountries"]);
+
   // get data from api
   const downloadData = async () => {
     console.log("trying to download");
