@@ -93,6 +93,7 @@ export default function Sidebar() {
                     <nav className="mt-5 space-y-1 px-2">
                       {countries?.map((item) => (
                         <button
+                          key={item.index.toString()}
                           onClick={(e) => onSelectedCountry(e)}
                           className="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-white hover:bg-indigo-600 hover:bg-opacity-75"
                         >
@@ -147,6 +148,7 @@ export default function Sidebar() {
               <nav className="mt-5 flex-1 space-y-1 px-2">
                 {countries?.map((item) => (
                   <button
+                    key={item.index.toString()}
                     value={item.country}
                     onClick={(e) => onSelectedCountry(e)}
                     className="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-white hover:bg-indigo-600 hover:bg-opacity-75"
@@ -211,6 +213,7 @@ export default function Sidebar() {
                 ) : (
                   gblu.data?.map((item) => (
                     <GBLUCard
+                      key={item.index.toString()}
                       gbluItem={{
                         hr_area: item.hr_area,
                         legislative_update_summary:
