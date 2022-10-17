@@ -4,6 +4,7 @@ import { prisma } from "../../server/db/client";
 import * as ExcelJS from "exceljs";
 
 const download = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log(req.body);
   const workbook = new ExcelJS.Workbook();
   workbook.creator = "test";
   workbook.lastModifiedBy = "test";

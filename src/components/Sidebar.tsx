@@ -1,5 +1,4 @@
 import { Fragment, useState, MouseEvent } from "react";
-import * as FileSaver from "file-saver";
 import { Dialog, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -17,24 +16,6 @@ export default function Sidebar() {
       country: selectedCountry,
     },
   ]);
-
-  const downloadData = async () => {
-    const data = await fetch("/api/download", {
-      method: "POST",
-      body: JSON.stringify({
-        title: "foo",
-        body: "bar",
-        userId: 1,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Response-type": "blob",
-      },
-    }).then((res) => {
-      return res.blob();
-    });
-    FileSaver.saveAs(data, "data.xlsx");
-  };
 
   const onSelectedCountry = (e: MouseEvent<HTMLElement>) => {
     const country = countries!.find(
