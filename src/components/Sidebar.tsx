@@ -89,12 +89,18 @@ export default function Sidebar() {
                   </Transition.Child>
                   <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
                     <div className="flex flex-shrink-0 items-center px-4">
-                      <Image src="/gowdie.png" alt="Your Company" />
+                      <Image
+                        width="50"
+                        height="40"
+                        src="/gowdie.png"
+                        alt="Your Company"
+                      />
                     </div>
                     <nav className="mt-5 space-y-1 px-2">
                       {countries?.map((item) => (
                         <button
                           key={item.index.toString()}
+                          value={item.country}
                           onClick={(e) => onSelectedCountry(e)}
                           className="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-white hover:bg-indigo-600 hover:bg-opacity-75"
                         >
@@ -141,8 +147,8 @@ export default function Sidebar() {
               <div className="flex flex-shrink-0 items-center px-4">
                 <Image
                   src="/gowdie.png"
-                  width="200"
-                  height="150"
+                  width="100"
+                  height="75"
                   alt="Your Company"
                 />
               </div>
@@ -201,7 +207,7 @@ export default function Sidebar() {
                 </h1>
                 <img
                   src={`https://countryflagsapi.com/png/${selectedFlag}`}
-                  width="150"
+                  className="w-24 lg:w-48"
                 />
               </div>
 
