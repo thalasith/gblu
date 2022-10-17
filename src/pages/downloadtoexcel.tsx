@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import DownloadSection from "../components/DownloadSection";
 
-const Download: NextPage = () => {
+const DownloadToExcel: NextPage = () => {
   // get data from api
 
   return (
@@ -17,4 +17,4 @@ const Download: NextPage = () => {
   );
 };
 
-export default Download;
+export default DownloadToExcel;

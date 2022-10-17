@@ -1,5 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import * as FileSaver from "file-saver";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { trpc } from "../utils/trpc";
 
 export default function DownloadSection() {
@@ -18,6 +19,12 @@ export default function DownloadSection() {
         return country.toLowerCase().includes(value.toLowerCase());
       })
     );
+  };
+
+  console.log(selectedCountries);
+
+  const handleCountryDelete = (country: string) => {
+    setSelectedCountries(selectedCountries.filter((c) => c !== country));
   };
 
   const selectCountry = (country: string) => {
@@ -82,6 +89,12 @@ export default function DownloadSection() {
             className="mx-1 rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2"
           >
             {country}
+            <button
+              className="pl-2"
+              onClick={() => handleCountryDelete(country)}
+            >
+              <XMarkIcon className="h-6 w-6 pt-2" aria-hidden="true" />
+            </button>
           </div>
         ))}
       </div>

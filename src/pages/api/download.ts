@@ -9,9 +9,8 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
   workbook.creator = "test";
   workbook.lastModifiedBy = "test";
   workbook.created = new Date();
-  workbook.modified = new Date();
 
-  countryList.forEach(async (country: string) => {
+  for (const country of countryList) {
     const worksheet = workbook.addWorksheet(country);
     worksheet.columns = [
       { header: "", key: "id", width: 4 },
@@ -93,22 +92,20 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
       fgColor: { argb: "00A8C8" },
       bgColor: { argb: "00A8C8" },
     };
-
-    // const data = await prisma.gblu.findMany({
-    //   where: {
-    //     country: country,
-    //   },
-    // });
-    // const rowData = data.map((data) => {
-    //   return [
-    //     data.hr_area,
-    //     data.law_in_force,
-    //     data.new_law,
-    //     data.legislative_update_summary,
-    //     data.employer_action_required,
-    //   ];
-    // });
-    // console.log(rowData);
+    const data = await prisma.gblu.findMany({
+      where: {
+        country: country,
+      },
+    });
+    const rowData = data.map((data) => {
+      return [
+        data.hr_area,
+        data.law_in_force,
+        data.legislative_update_summary,
+        data.new_law,
+        data.employer_action_required,
+      ];
+    });
     worksheet.addTable({
       name: country + "_table",
       ref: "B7",
@@ -129,7 +126,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
         },
         { name: "New Steps", totalsRowFunction: "sum", filterButton: true },
       ],
-      rows: [["Social Security", "None", "None", "None", "None"]],
+      rows: rowData,
     });
     let rowIndex = 1;
     for (rowIndex; rowIndex <= worksheet.rowCount; rowIndex++) {
@@ -139,44 +136,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
         wrapText: true,
       };
     }
-  });
-
-  // worksheet.addTable({
-  //   name: "MyTable",
-  //   ref: "B7",
-  //   headerRow: true,
-  //   totalsRow: false,
-  //   columns: [
-  //     { name: "Benefit", totalsRowLabel: "Totals:", filterButton: true },
-  //     { name: "Effective Date", totalsRowLabel: "Totals:", filterButton: true },
-  //     { name: "New Law", totalsRowLabel: "Totals:", filterButton: true },
-  //     {
-  //       name: "Description of Law",
-  //       totalsRowLabel: "Totals:",
-  //       filterButton: true,
-  //     },
-  //     { name: "New Steps", totalsRowFunction: "sum", filterButton: true },
-  //   ],
-  //   rows: [
-  //     ["Social Security", "None", "None", "None", "None"],
-  //     [
-  //       "Retirement",
-  //       "Currently Effective",
-  //       "Super home buyer Scheme plan scrapped",
-  //       "The newly elected Labor government confirmed that it would not proceed with the previous coalition government’s proposed introduction of the Super Home Buyer Scheme that would have allowed eligible first homebuyers to access up to 40% of their superannuation to purchase the property.  ",
-  //       "JPMC to dispense with any planning that was underway to comply with proposed Scheme.",
-  //     ],
-  //   ],
-  // });
-
-  // let rowIndex = 1;
-  // for (rowIndex; rowIndex <= worksheet.rowCount; rowIndex++) {
-  //   worksheet.getRow(rowIndex).alignment = {
-  //     vertical: "middle",
-  //     horizontal: "center",
-  //     wrapText: true,
-  //   };
-  // }
+  }
 
   var fileName = "FileName.xlsx";
   res.setHeader(
