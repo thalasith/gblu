@@ -1,14 +1,10 @@
 import { Fragment, useState, MouseEvent } from "react";
-
+import * as FileSaver from "file-saver";
 import { Dialog, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { trpc } from "../utils/trpc";
 import GBLUCard from "./GBLUCard";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +17,24 @@ export default function Sidebar() {
       country: selectedCountry,
     },
   ]);
-  console.log(gblu.data);
+
+  const downloadData = async () => {
+    const data = await fetch("/api/download", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "foo",
+        body: "bar",
+        userId: 1,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Response-type": "blob",
+      },
+    }).then((res) => {
+      return res.blob();
+    });
+    FileSaver.saveAs(data, "data.xlsx");
+  };
 
   const onSelectedCountry = (e: MouseEvent<HTMLElement>) => {
     const country = countries!.find(
@@ -210,7 +223,7 @@ export default function Sidebar() {
                   className="w-24 lg:w-48"
                 />
               </div>
-
+              {/* <button onClick={() => downloadData()}> Hi there</button> */}
               <div className="mx-auto max-w-6xl px-4 text-gray-700 sm:px-6 md:px-8">
                 {/* Replace with your content */}
                 {gblu.data?.length === 0 ? (

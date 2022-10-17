@@ -2,27 +2,9 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
-// var FileSaver = require("file-saver");
 
 const Home: NextPage = () => {
   // get data from api
-  const downloadData = async () => {
-    const data = await fetch("/api/download", {
-      method: "POST",
-      body: JSON.stringify({
-        title: "foo",
-        body: "bar",
-        userId: 1,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Response-type": "blob",
-      },
-    }).then((res) => {
-      return res.blob();
-    });
-    // FileSaver.saveAs(data, "data.xlsx");
-  };
 
   return (
     <>
