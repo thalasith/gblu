@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
-var FileSaver = require("file-saver");
+// var FileSaver = require("file-saver");
 
 const Home: NextPage = () => {
   // get data from api
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
     }).then((res) => {
       return res.blob();
     });
-    FileSaver.saveAs(data, "data.xlsx");
+    // FileSaver.saveAs(data, "data.xlsx");
   };
 
   return (
