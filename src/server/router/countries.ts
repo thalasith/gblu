@@ -9,12 +9,19 @@ export const countriesRouter = createRouter()
   })
   .query("getCountryList", {
     async resolve({ ctx }) {
-      const data = await (
-        await ctx.prisma.countries.findMany()
-      ).map((country) => {
+      const data = (await ctx.prisma.countries.findMany()).map((country) => {
         return country.country;
       });
 
       return data;
+    },
+  })
+  .query("getCountryCode", {
+    input: z.object({ country: z.string() }),
+    async resolve({ ctx, input }) {
+      const data = await ctx.prisma.countries.findFirst({
+        where: { country: input.country },
+      });
+      return data?.country_code;
     },
   });

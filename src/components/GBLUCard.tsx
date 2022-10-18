@@ -11,7 +11,7 @@ interface GBLU {
 
 export default function GBLUCard({ gbluItem }: { gbluItem: GBLU }) {
   const [showDetails, setShowDetails] = useState(false);
-  console.log(gbluItem);
+
   const onShowDetails = () => {
     setShowDetails(!showDetails);
   };
