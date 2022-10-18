@@ -44,10 +44,10 @@ export default function GBLUSection() {
 
   return (
     <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
-      <div className="mx-4 flex border-b-2  pb-2 pt-4 text-4xl">
+      <div className="mx-4 flex border-b-2  pb-2 pt-4 text-2xl lg:text-4xl">
         GBLU by Country
       </div>
-      <div className=" px-4 pt-4 text-2xl">
+      <div className="px-4 pt-4 text-2xl">
         <label className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
           Search
         </label>
@@ -81,7 +81,7 @@ export default function GBLUSection() {
       <main className="flex-1">
         <div className="py-6">
           <div className="mx-auto flex max-w-6xl justify-between px-4 pb-4 sm:px-6 md:px-8">
-            <h1 className="text-8xl font-semibold text-gray-900">
+            <h1 className="text-4xl font-semibold text-gray-900 lg:text-8xl">
               {selectedCountry}
             </h1>
             <img

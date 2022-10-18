@@ -48,10 +48,10 @@ export default function DownloadSection() {
 
   return (
     <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
-      <div className="flex border-b-2 pb-2 pt-4 text-4xl">
+      <div className="mx-4 flex border-b-2  pb-2 pt-4 text-2xl lg:text-4xl">
         GBLU Download to Excel
       </div>
-      <div className=" pt-4 text-2xl">
+      <div className="px-4 pt-4 text-2xl">
         <label className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
           Search
         </label>
