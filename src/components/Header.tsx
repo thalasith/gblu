@@ -16,17 +16,15 @@ export default function Header() {
           </div>
 
           <div className="lg:text-md flex w-0 flex-1 items-center justify-end text-xs">
-            <Link
-              href="/"
-              className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gray-600 py-1 px-2  text-base font-medium text-white shadow-sm hover:bg-gray-800 lg:px-4 lg:py-2"
-            >
-              <a>Country Viewer</a>
+            <Link href="/">
+              <a className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gray-600 py-1 px-2  text-base font-medium text-white shadow-sm hover:bg-gray-800 lg:px-4 lg:py-2">
+                Country Viewer
+              </a>
             </Link>
-            <Link
-              href="/download"
-              className="ml-2 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gray-600 py-1 px-2  text-base font-medium text-white shadow-sm hover:bg-gray-800 lg:px-4 lg:py-2"
-            >
-              <a>Download to Excel</a>
+            <Link href="/download">
+              <a className="ml-2 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gray-600 py-1 px-2  text-base font-medium text-white shadow-sm hover:bg-gray-800 lg:px-4 lg:py-2">
+                Download to Excel
+              </a>
             </Link>
           </div>
         </div>
