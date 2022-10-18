@@ -10,6 +10,7 @@ export default function DownloadSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(countries);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [excelName, setExcelName] = useState("data");
 
   const handleCountryChange = (e: ChangeEvent<HTMLElement>) => {
     const { value } = e.target as HTMLInputElement;
@@ -83,28 +84,35 @@ export default function DownloadSection() {
         </div>
       </div>
       <div className="flex flex-row justify-center pt-4 text-2xl">
-        {selectedCountries.map((country) => (
-          <div
-            key={country}
-            className="mx-1 rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2"
-          >
-            {country}
-            <button
-              className="pl-2"
-              onClick={() => handleCountryDelete(country)}
+        {selectedCountries.length === 0 ? (
+          <p>You need to select at least one country first!</p>
+        ) : (
+          selectedCountries.map((country) => (
+            <div
+              key={country}
+              className="mx-1 rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2"
             >
-              <XMarkIcon className="h-6 w-6 pt-2" aria-hidden="true" />
-            </button>
-          </div>
-        ))}
+              {country}
+              <button
+                className="pl-2"
+                onClick={() => handleCountryDelete(country)}
+              >
+                <XMarkIcon className="h-6 w-6 pt-2" aria-hidden="true" />
+              </button>
+            </div>
+          ))
+        )}
       </div>
+
       <div className="flex flex-row justify-center pt-4 text-2xl">
-        <button
-          className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
-          onClick={downloadData}
-        >
-          Confirm download
-        </button>
+        {selectedCountries.length != 0 && (
+          <button
+            className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
+            onClick={downloadData}
+          >
+            Confirm download
+          </button>
+        )}
       </div>
     </div>
   );

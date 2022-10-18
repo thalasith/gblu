@@ -11,7 +11,10 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
   workbook.created = new Date();
 
   for (const country of countryList) {
-    const worksheet = workbook.addWorksheet(country);
+    const worksheet = workbook.addWorksheet(country, {
+      views: [{ showGridLines: false }],
+    });
+
     worksheet.columns = [
       { header: "", key: "id", width: 4 },
       { header: "", key: "benefit", width: 21 },
@@ -57,36 +60,36 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
       bold: true,
       color: { argb: "FFFFFF" },
     };
-    worksheet.getCell("B7").font = tableHeaderStyle;
-    worksheet.getCell("C7").font = tableHeaderStyle;
-    worksheet.getCell("D7").font = tableHeaderStyle;
-    worksheet.getCell("E7").font = tableHeaderStyle;
-    worksheet.getCell("F7").font = tableHeaderStyle;
-    worksheet.getCell("B7").fill = {
+    worksheet.getCell("B9").font = tableHeaderStyle;
+    worksheet.getCell("C9").font = tableHeaderStyle;
+    worksheet.getCell("D9").font = tableHeaderStyle;
+    worksheet.getCell("E9").font = tableHeaderStyle;
+    worksheet.getCell("F9").font = tableHeaderStyle;
+    worksheet.getCell("B9").fill = {
       type: "pattern",
       pattern: "solid",
       fgColor: { argb: "00A8C8" },
       bgColor: { argb: "00A8C8" },
     };
-    worksheet.getCell("C7").fill = {
+    worksheet.getCell("C9").fill = {
       type: "pattern",
       pattern: "solid",
       fgColor: { argb: "00A8C8" },
       bgColor: { argb: "00A8C8" },
     };
-    worksheet.getCell("D7").fill = {
+    worksheet.getCell("D9").fill = {
       type: "pattern",
       pattern: "solid",
       fgColor: { argb: "00A8C8" },
       bgColor: { argb: "00A8C8" },
     };
-    worksheet.getCell("E7").fill = {
+    worksheet.getCell("E9").fill = {
       type: "pattern",
       pattern: "solid",
       fgColor: { argb: "00A8C8" },
       bgColor: { argb: "00A8C8" },
     };
-    worksheet.getCell("F7").fill = {
+    worksheet.getCell("F9").fill = {
       type: "pattern",
       pattern: "solid",
       fgColor: { argb: "00A8C8" },
@@ -97,7 +100,20 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
         country: country,
       },
     });
-    console.log("data", data);
+
+    const countryInfo = await prisma.countries.findFirst({
+      where: { country: country },
+    });
+
+    const imageUrl = `https://countryflagsapi.com/png/${countryInfo?.country_code}`;
+    const response = await fetch(imageUrl);
+    const buffer = await response.arrayBuffer();
+    const imageId = workbook.addImage({
+      buffer,
+      extension: "png",
+    });
+    worksheet.addImage(imageId, "F2:F7");
+
     const rowData =
       data.length != 0
         ? data.map((data) => {
@@ -106,7 +122,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
               data.law_in_force,
               data.legislative_update_summary,
               data.new_law,
-              data.employer_action_required,
+              data.impact_on_employers,
             ];
           })
         : [
@@ -118,10 +134,9 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
             ["Perks and Allowances", "None", "None", "None", "None"],
           ];
 
-    console.log(rowData);
     worksheet.addTable({
-      name: country.replace(" ", "_") + "_table",
-      ref: "B7",
+      name: country.replace(" ", "_").replace(",", "") + "_table",
+      ref: "B9",
       headerRow: true,
       totalsRow: false,
       columns: [

@@ -4,8 +4,6 @@ import Header from "../components/Header";
 import DownloadSection from "../components/DownloadSection";
 
 const Download: NextPage = () => {
-  // get data from api
-
   return (
     <>
       <Head>
