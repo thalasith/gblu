@@ -1,50 +1,63 @@
-# Create T3 App
+# The Gowdie
 
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
+This project is inspired by a colleague of mine, named Gary Gowdie and such, the logo is of his face.
 
-## Why are there `.js` files in here?
+## Why build this project?
 
-As per [T3-Axiom #3](https://github.com/t3-oss/create-t3-app/tree/next#3-typesafety-isnt-optional), we take typesafety as a first class citizen. Unfortunately, not all frameworks and plugins support TypeScript which means some of the configuration files have to be `.js` files.
+This is an app that is built to solve an internal company problem. We have a lot of legislative updates revolving HR but in many cases, it is very hard to filter through as it comes in a giant unfiltered excel dump.
 
-We try to emphasize that these files are javascript for a reason, by explicitly declaring its type (`cjs` or `mjs`) depending on what's supported by the library it is used by. Also, all the `js` files in this project are still typechecked using a `@ts-check` comment at the top.
+The goal of this app is to:
 
-## What's next? How do I make an app with this?
+1. Build a frontend for internal colleagues to view the updates by country.
+2. Build a download to excel of updates by country as this can then be shared externally to clients.
+3. Build a pipeline to keep the database updated.
 
-We try to keep this project as simple as possible, so you can start with the most basic configuration and then move on to more advanced configuration.
+## Technology Stack
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+This project was bootstrapped with [Create-T3-App](https://create.t3.gg/) which includes all the technology below.
 
-- [Next-Auth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io) (using @next version? [see v10 docs here](https://trpc.io/docs/v10/))
+As such, below is a highlight of all the major technologies I used in this project and reasons why.
 
-Also checkout these awesome tutorials on `create-t3-app`.
+1. Programming Language: Typescript
+   - In my point of view, the coding community is moving towards statically typed languages such as Typescript and Rust. This provides safety in catching bugs to ensure our app is behaving correctly.
+   - The entire stack is built on Typescript which is nice so I don't have to go back and forth between different code.
+   - Ensures that if another colleague wants to get involved, they just need to learn Typescript and can help with the entire stack.
+2. Programming Language: Python
+   - Used Python to build a Jupyter notebook for data-cleaning and uploading to the SQL database.
+   - Reason why I used Python for this is that many of my colleagues are actuaries and should have some peripheral knowledge of Python. Thus if I could build a Jupyter notebook with some markdown on what the code does, they should be able to use it to update the data as we receive more legislative updates.
+3. Database: MySQL (specifically Planetscale)
+   - Wanted a relational database in case we need relations in the future (i.e. building out users, and storing previous excel downloads)
+   - Not very opinionated on MySQL vs Postgres. I have more experience with MySQL and I liked PlanetScale's UI/UX.
+4. Object Relational Mapping: Prisma
+   - Type-safe ORM in Typescript
+   - Increases my efficiency and ensures consistency in my queries to my database rather than using raw SQL queries.
+   - One can argue that using raw SQL queries can increase the app's speed. However, the app is working relatively quick. May remove this all together if future iterations make it too slow.
+5. Framework: NextJS
+   - Very easy decision for me to go with NextJS.
+   - Provides me with a full-stack framework so I do not have to set up a separate server for my backend logic.
+   - SSR is also nice for search engine optimization.
+6. Frontend: React
+   - Very popular front-end library.
+   - It is the standard for building apps.
+7. CSS: Tailwind
+   - Starting to become the standard for CSS as it is highly customizable
+   - Is more or less unopinionated vs. MUI or Bootstrap in how you handle your CSS.
+8. Hosting: Vercel
+   - Free hosting service and easy integration with github.
 
-- [Build a Blog With the T3 Stack - tRPC, TypeScript, Next.js, Prisma & Zod](https://www.youtube.com/watch?v=syEWlxVFUrY)
-- [Build a Live Chat Application with the T3 Stack - TypeScript, Tailwind, tRPC](https://www.youtube.com/watch?v=dXRRY37MPuk)
-- [Build a full stack app with create-t3-app](https://www.nexxel.dev/blog/ct3a-guestbook)
-- [A first look at create-t3-app](https://dev.to/ajcwebdev/a-first-look-at-create-t3-app-1i8f)
+## Lessons
 
-## How do I deploy this?
+1. Learnt to deal with ExcelJS to download Excel.
+2. Learnt how to data other than JSON from backend to frontend.
+3. Learnt how to stream data through arraybuffer.
+4. Overall, improved my confidence in being a software engineer.
 
-### Vercel
+## Next Steps
 
-We recommend deploying to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss). It makes it super easy to deploy NextJs apps.
+Next steps for when I pick this project up again:
 
-- Push your code to a GitHub repository.
-- Go to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss) and sign up with GitHub.
-- Create a Project and import the repository you pushed your code to.
-- Add your environment variables.
-- Click **Deploy**
-- Now whenever you push a change to your repository, Vercel will automatically redeploy your website!
-
-### Docker
-
-You can also dockerize this stack and deploy a container. See the [Docker deployment page](https://create-t3-app-nu.vercel.app/en/deployment/docker) for details.
-
-## Useful resources
-
-Here are some resources that we commonly refer to:
-
-- [Protecting routes with Next-Auth.js](https://next-auth.js.org/configuration/nextjs#unstable_getserversession)
+1. Write comments on the jupyter notebook for updates for colleagues.
+2. Ensure that we are appending data to the database rather than doing a complete rewrite of the data everytime.
+3. Potentially restrict access to login only.
+4. Provide a way for colleagues to save their download preferences by countries.
+5. Review the database to dynamically filter the data further (i.e. provide all updates between July and October only rather than currently which is for all timeline).
