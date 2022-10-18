@@ -97,17 +97,30 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
         country: country,
       },
     });
-    const rowData = data.map((data) => {
-      return [
-        data.hr_area,
-        data.law_in_force,
-        data.legislative_update_summary,
-        data.new_law,
-        data.employer_action_required,
-      ];
-    });
+    console.log("data", data);
+    const rowData =
+      data.length != 0
+        ? data.map((data) => {
+            return [
+              data.hr_area,
+              data.law_in_force,
+              data.legislative_update_summary,
+              data.new_law,
+              data.employer_action_required,
+            ];
+          })
+        : [
+            ["Career", "None", "None", "None", "None"],
+            ["Retirement", "None", "None", "None", "None"],
+            ["Medical", "None", "None", "None", "None"],
+            ["Risk Benefits", "None", "None", "None", "None"],
+            ["Leaves", "None", "None", "None", "None"],
+            ["Perks and Allowances", "None", "None", "None", "None"],
+          ];
+
+    console.log(rowData);
     worksheet.addTable({
-      name: country + "_table",
+      name: country.replace(" ", "_") + "_table",
       ref: "B7",
       headerRow: true,
       totalsRow: false,
@@ -138,7 +151,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
-  var fileName = "FileName.xlsx";
+  const fileName = "FileName.xlsx";
   res.setHeader(
     "Content-Type",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
