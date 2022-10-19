@@ -52,7 +52,7 @@ export default function DownloadSection() {
       <div className="mx-4 flex border-b-2  pb-2 pt-4 text-2xl lg:text-4xl">
         GBLU Download to Excel
       </div>
-      <div className="px-4 pt-4 text-2xl">
+      <a className="px-4 pt-4 text-2xl" onFocus={() => setActive(true)}>
         <label className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
           Search
         </label>
@@ -63,7 +63,6 @@ export default function DownloadSection() {
             value={searchTerm}
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10  text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             placeholder="Search a country"
-            onFocus={() => setActive(true)}
             onChange={(e) => handleCountryChange(e)}
           />
           <ul
@@ -82,7 +81,7 @@ export default function DownloadSection() {
               ))}
           </ul>
         </div>
-      </div>
+      </a>
       <div className="flex flex-row justify-center pt-4 text-2xl">
         {selectedCountries.length === 0 ? (
           <p>You need to select at least one country first!</p>
@@ -90,14 +89,25 @@ export default function DownloadSection() {
           selectedCountries.map((country) => (
             <div
               key={country}
-              className="mx-1 rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2"
+              className="mx-1 flex rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2 "
             >
-              {country}
+              {country === "Ireland" ? (
+                <img
+                  alt="gary"
+                  src="/gowdie.png"
+                  width="40"
+                  height="40"
+                  className="my-2"
+                />
+              ) : (
+                ""
+              )}
+              <span className="pt-1">{country}</span>
               <button
-                className="pl-2"
+                className="pl-2 "
                 onClick={() => handleCountryDelete(country)}
               >
-                <XMarkIcon className="h-6 w-6 pt-2" aria-hidden="true" />
+                <XMarkIcon className="h-6 w-6 " aria-hidden="true" />
               </button>
             </div>
           ))

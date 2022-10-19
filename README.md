@@ -61,3 +61,4 @@ Next steps for when I pick this project up again:
 3. Potentially restrict access to login only.
 4. Provide a way for colleagues to save their download preferences by countries.
 5. Review the database to dynamically filter the data further (i.e. provide all updates between July and October only rather than currently which is for all timeline).
+6. Review bugs. Example: When the search bar has the dropdown, you MUST select a country for the dropdown to be removed. Ideally, if click on anything other than the search and dropdown, it will remove the dropdown.
