@@ -10,7 +10,6 @@ export default function DownloadSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(countries);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [excelName, setExcelName] = useState("data");
 
   const handleCountryChange = (e: ChangeEvent<HTMLElement>) => {
     const { value } = e.target as HTMLInputElement;
@@ -92,6 +91,17 @@ export default function DownloadSection() {
               className="mx-1 flex rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2 "
             >
               {country === "Ireland" ? (
+                <img
+                  alt="alan"
+                  src="/alan.png"
+                  width="40"
+                  height="40"
+                  className="my-2"
+                />
+              ) : (
+                ""
+              )}
+              {country === "United Kingdom" ? (
                 <img
                   alt="gary"
                   src="/gowdie.png"
