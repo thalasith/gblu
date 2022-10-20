@@ -2,9 +2,9 @@ import pptxgen from "pptxgenjs";
 
 export default function PPTXDownloadSection() {
   const downloadData = async () => {
-    let pptx = new pptxgen();
+    const pptx = new pptxgen();
 
-    let slide = pptx.addSlide();
+    const slide = pptx.addSlide();
     slide.addText("GBLU Updates", {
       x: 0.25,
       y: 0.25,
@@ -24,7 +24,7 @@ export default function PPTXDownloadSection() {
       path: "https://countryflagsapi.com/png/CAN",
     });
 
-    let rows: any[] = [];
+    const rows: any[] = [];
     rows.push(["Week", "Lines of Code Written", "Mood Indicator"]);
     slide.addTable(rows, { align: "left", fontFace: "Arial" });
 
