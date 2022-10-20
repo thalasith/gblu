@@ -33,7 +33,7 @@ export default function DownloadSection() {
   };
 
   const downloadData = async () => {
-    const data = await fetch("/api/download", {
+    const data = await fetch("/api/exceldownload", {
       method: "POST",
       body: JSON.stringify(selectedCountries),
       headers: {
