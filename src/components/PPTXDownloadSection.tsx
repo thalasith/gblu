@@ -1,5 +1,36 @@
 import pptxgen from "pptxgenjs";
 
+const tableHeader = {
+  align: "left",
+  fontFace: "Arial",
+  fill: { color: "002C76" },
+  color: "FFFFFF",
+};
+
+const DATA = [
+  [
+    "Career — Health",
+    "Effective dates vary.",
+    "Employers to disclose electronic monitoring, implement workplace protections",
+    "Bill 88, the Working for Workers Act 2022, which received Royal Assent on 11 April 2022, amends the Employment Standards Act 2000 and the Occupational Health and Safety Act (OSHA). The measure also introduces the Digital Platform Workers’ Rights Act, 2022, among other changes",
+    "Employers should review the changes, as they will affect their HR policies and practices.",
+  ],
+  [
+    "Career",
+    "2 June 2022",
+    "Guidance on disconnection from work",
+    "Employers in Ontario with 25 or more employees must provide a written policy on disconnection from the workplace under Bill 27, Working for Workers Act, 2021. Employers have until 2 June 2022 to implement their disconnection policy. Recent guidance on the new policy from the Ministry of Labour, Training and Skills Development addresses how to calculate workforce thresholds and outlines the scope and contents of the disconnection policy. Employers that meet the employee thresholds on 1 January of any calendar year must issue their policy before 1 March of that calendar year.",
+    "Employers should review the changes, as they will affect their HR policies and practices.",
+  ],
+  [
+    "Career — Health",
+    "Currently effective ",
+    "Employers required to provide paid sick leave",
+    "From 1 Jan 2022, provincially regulated employers in British Columbia must provide five days of paid sick leave per year to all eligible employees under Bill 13, which amends the Employment Standards Amendment (ESA) Act (No. 2), 2021. The new leave is in addition to the current entitlement of three days of unpaid sick leave. Full- and part-time employees covered by the ESA who have worked for their employer at least 90 days are eligible. However, the ESA does not cover federally regulated sectors, self-employed workers, and explicitly excluded professions and occupations. Employers must pay an average day’s pay for each day of sick leave, using a pay calculation formula. Employees intending to take paid leave do not have to provide advance notification, but employers can request proof of illness or injury. British Columbia is the third province in Canada to enact paid sick leave and the first to provide this amount of leave. The government estimates that more than one million workers in the province currently do not have access to paid sick leave.",
+    "Employers should review the changes as they may affect their HR policies and practices.",
+  ],
+];
+
 export default function PPTXDownloadSection() {
   const downloadData = async () => {
     const pptx = new pptxgen();
@@ -18,15 +49,40 @@ export default function PPTXDownloadSection() {
     });
     slide.addImage({
       x: "80%",
-      y: "10%",
+      y: "7.5%",
       w: 1,
       h: 0.66,
       path: "https://countryflagsapi.com/png/CAN",
     });
 
     const rows: any[] = [];
-    rows.push(["Week", "Lines of Code Written", "Mood Indicator"]);
-    slide.addTable(rows, { align: "left", fontFace: "Arial" });
+    rows.push([
+      {
+        text: "Benefit",
+        options: tableHeader,
+      },
+      { text: "Effective Date", options: tableHeader },
+      { text: "New Law", options: tableHeader },
+      {
+        text: "Description of the Law",
+        options: tableHeader,
+      },
+      {
+        text: "Action Required",
+        options: tableHeader,
+      },
+    ]);
+    DATA.forEach((row) => {
+      rows.push(row);
+    });
+    slide.addTable(rows, {
+      x: 0.25,
+      y: "20%",
+      align: "left",
+      fontFace: "Arial",
+      fontSize: 8,
+      colW: [1, 1, 1.25, 4.5, 1],
+    });
 
     slide.slideNumber = { x: "95%", y: "95%", fontSize: 8, fontFace: "Arial" };
 
