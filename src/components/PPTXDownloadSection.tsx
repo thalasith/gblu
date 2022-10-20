@@ -24,6 +24,10 @@ export default function PPTXDownloadSection() {
       path: "https://countryflagsapi.com/png/CAN",
     });
 
+    let rows: any[] = [];
+    rows.push(["Week", "Lines of Code Written", "Mood Indicator"]);
+    slide.addTable(rows, { align: "left", fontFace: "Arial" });
+
     slide.slideNumber = { x: "95%", y: "95%", fontSize: 8, fontFace: "Arial" };
 
     pptx.writeFile({ fileName: "gblu.pptx" });
