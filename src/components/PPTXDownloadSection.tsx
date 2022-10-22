@@ -208,7 +208,6 @@ const maximumsCharsInRow = [13, 16, 16, 80, 12];
 // Method to get the maximum number of rows for each cell.
 const getRowMaximums = (data: string[][]) => {
   const numberOfLines = data.map((row) => {
-    let max = 1;
     return row.map((cell, index) => {
       const cellLength = cell.length;
       const maxChars = maximumsCharsInRow[index] || 1;
