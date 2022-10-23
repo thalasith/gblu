@@ -1,3 +1,5 @@
+import { useState, ChangeEvent } from "react";
+import { trpc } from "../utils/trpc";
 import pptxgen from "pptxgenjs";
 
 const tableHeader = {
@@ -28,174 +30,6 @@ const DATA = [
     "Employers required to provide paid sick leave",
     "From 1 Jan 2022, provincially regulated employers in British Columbia must provide five days of paid sick leave per year to all eligible employees under Bill 13, which amends the Employment Standards Amendment (ESA) Act (No. 2), 2021. The new leave is in addition to the current entitlement of three days of unpaid sick leave. Full- and part-time employees covered by the ESA who have worked for their employer at least 90 days are eligible. However, the ESA does not cover federally regulated sectors, self-employed workers, and explicitly excluded professions and occupations. Employers must pay an average day’s pay for each day of sick leave, using a pay calculation formula. Employees intending to take paid leave do not have to provide advance notification, but employers can request proof of illness or injury. British Columbia is the third province in Canada to enact paid sick leave and the first to provide this amount of leave. The government estimates that more than one million workers in the province currently do not have access to paid sick leave.",
     "Employers should review the changes as they may affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
-  ],
-  [
-    "Career",
-    "2 Sept 2022",
-    "Remote from Work ",
-    "Dummy data",
-    "Employers should review the changes, as they will affect their HR policies and practices.",
   ],
 ];
 
@@ -262,6 +96,34 @@ const sortRowsIntoSlides = (data: string[][]) => {
 const slideData = sortRowsIntoSlides(DATA);
 
 export default function PPTXDownloadSection() {
+  const { data: countries } = trpc.useQuery(["countries.getCountryList"]);
+
+  const [active, setActive] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState(countries);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
+  const handleCountryChange = (e: ChangeEvent<HTMLElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setSearchTerm(value);
+    setSearchResults(
+      countries!.filter((country) => {
+        return country.toLowerCase().includes(value.toLowerCase());
+      })
+    );
+  };
+
+  const handleCountryDelete = (country: string) => {
+    setSelectedCountries(selectedCountries.filter((c) => c !== country));
+  };
+
+  const selectCountry = (country: string) => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries([...selectedCountries, country]);
+  };
+
   const downloadData = async () => {
     const pptx = new pptxgen();
     slideData.forEach((slideData) => {
@@ -320,7 +182,47 @@ export default function PPTXDownloadSection() {
 
   return (
     <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
-      <button onClick={downloadData}>Click Me!</button>
+      <a className="px-4 pt-4 text-2xl" onFocus={() => setActive(true)}>
+        <label className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+          Search
+        </label>
+        <div className="relative">
+          <input
+            type="search"
+            id="default-search"
+            value={searchTerm}
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10  text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            placeholder="Search a country"
+            onChange={(e) => handleCountryChange(e)}
+          />
+          <ul
+            className={`absolute w-full bg-white ${
+              active ? "block" : "hidden"
+            }`}
+          >
+            {searchResults &&
+              searchResults!.map((item) => (
+                <li
+                  key={item}
+                  className="my-1 w-full rounded border border-gray-400 bg-white px-4 py-1 text-gray-700"
+                >
+                  <button onClick={() => selectCountry(item)}>{item}</button>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </a>
+      <div className="flex flex-row justify-center pt-4 text-2xl">
+        {selectedCountries.length != 0 && (
+          <button
+            className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
+            onClick={downloadData}
+          >
+            Confirm download
+          </button>
+        )}
+      </div>
+      <button onClick={downloadData}>Click Me for Powerpoint!</button>
     </div>
   );
 }
