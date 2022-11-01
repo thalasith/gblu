@@ -11,7 +11,9 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
   workbook.created = new Date();
 
   for (const country of countryList) {
-    const worksheet = workbook.addWorksheet(country, {
+    const alpha_country = country.replace(/[\W_]+/g, "_");
+    console.log(alpha_country);
+    const worksheet = workbook.addWorksheet(alpha_country, {
       views: [{ showGridLines: false }],
     });
 
@@ -135,7 +137,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
           ];
 
     worksheet.addTable({
-      name: country.replace(" ", "_").replace(",", "") + "_table",
+      name: alpha_country + "_table",
       ref: "B9",
       headerRow: true,
       totalsRow: false,
