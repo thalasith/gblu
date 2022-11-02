@@ -51,66 +51,71 @@ export default function PPTXDownloadSection() {
       return res.json();
     });
 
+    console.log(data);
+
     const pptx = new pptxgen();
-    data.forEach((slideData: any) => {
+    data.forEach((countryData: any) => {
       const title = [
         {
           text: "GBLU Updates",
           options: { fontSize: 28, color: "002C76", breakLine: true },
         },
         {
-          text: "Canada",
+          text: countryData.country,
           options: { fontSize: 24, color: "808080", breakLine: true },
         },
       ];
-      const slide = pptx.addSlide();
-      slide.addText(title, {
-        x: 0.25,
-        y: 0.4,
-        w: 5,
-        h: "10%",
-        fontSize: 28,
-        bold: true,
-        color: "002C76",
-        fontFace: "Times New Roman",
-        align: "left",
-      });
+      countryData.data.forEach((slideData: any) => {
+        const slide = pptx.addSlide();
+        slide.addText(title, {
+          x: 0.25,
+          y: 0.4,
+          w: 5,
+          h: "10%",
+          fontSize: 28,
+          bold: true,
+          color: "002C76",
+          fontFace: "Times New Roman",
+          align: "left",
+        });
 
-      slide.addImage({
-        x: "80%",
-        y: "7.5%",
-        w: 1,
-        h: 0.66,
-        path: "https://countryflagsapi.com/png/CAN",
-      });
+        slide.addImage({
+          x: "80%",
+          y: "7.5%",
+          w: 1,
+          h: 0.66,
+          path: `https://countryflagsapi.com/png/${countryData.countryCode}`,
+        });
 
-      const rows: any[] = [];
-      rows.push([
-        {
-          text: "Benefit",
-          options: tableHeader,
-        },
-        { text: "Effective Date", options: tableHeader },
-        { text: "New Law", options: tableHeader },
-        {
-          text: "Description of the Law",
-          options: tableHeader,
-        },
-        {
-          text: "Action Required",
-          options: tableHeader,
-        },
-      ]);
-      slideData.data.forEach((row: any[]) => {
-        rows.push(row);
-      });
-      slide.addTable(rows, {
-        x: 0.25,
-        y: "20%",
-        align: "left",
-        fontFace: "Arial",
-        fontSize: 8,
-        colW: [1, 1, 1.25, 4.5, 1],
+        const rows: any[] = [];
+        rows.push([
+          {
+            text: "Benefit",
+            options: tableHeader,
+          },
+          { text: "Effective Date", options: tableHeader },
+          { text: "New Law", options: tableHeader },
+          {
+            text: "Description of the Law",
+            options: tableHeader,
+          },
+          {
+            text: "Action Required",
+            options: tableHeader,
+          },
+        ]);
+
+        slideData.data.forEach((row: any[]) => {
+          rows.push(row);
+        });
+        slide.addTable(rows, {
+          x: 0.25,
+          y: "20%",
+          align: "left",
+          fontFace: "Arial",
+          fontSize: 8,
+          colW: [1, 1, 1.25, 4.5, 1.5],
+        });
       });
     });
 
