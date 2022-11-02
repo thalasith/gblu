@@ -12,7 +12,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 
   for (const country of countryList) {
     const alpha_country = country.replace(/[\W_]+/g, "_");
-    console.log(alpha_country);
+
     const worksheet = workbook.addWorksheet(alpha_country, {
       views: [{ showGridLines: false }],
     });

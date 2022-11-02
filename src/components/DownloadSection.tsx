@@ -32,6 +32,13 @@ export default function DownloadSection() {
     setSelectedCountries([...selectedCountries, country]);
   };
 
+  const selectAllCountries = () => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries(countries!);
+  };
+  console.log(selectedCountries);
   const downloadData = async () => {
     const data = await fetch("/api/exceldownload", {
       method: "POST",
@@ -81,14 +88,29 @@ export default function DownloadSection() {
           </ul>
         </div>
       </a>
+      <button onClick={selectAllCountries}>Select All Countries</button>
       <div className="flex flex-row justify-center pt-4 text-2xl">
+        {selectedCountries.length != 0 && (
+          <button
+            className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
+            onClick={downloadData}
+          >
+            Confirm download
+          </button>
+        )}
+      </div>
+      <div
+        className={`grid ${
+          selectedCountries.length != 0 ? "grid-cols-3" : ""
+        } justify-center pt-4 text-2xl`}
+      >
         {selectedCountries.length === 0 ? (
           <p>You need to select at least one country first!</p>
         ) : (
           selectedCountries.map((country) => (
             <div
               key={country}
-              className="mx-1 flex rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2 "
+              className="mx-1 my-2 flex flex-row justify-between rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2 align-top"
             >
               {country === "Ireland" ? (
                 <img
@@ -113,25 +135,12 @@ export default function DownloadSection() {
                 ""
               )}
               <span className="pt-1">{country}</span>
-              <button
-                className="pl-2 "
-                onClick={() => handleCountryDelete(country)}
-              >
-                <XMarkIcon className="h-6 w-6 " aria-hidden="true" />
+
+              <button onClick={() => handleCountryDelete(country)}>
+                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
           ))
-        )}
-      </div>
-
-      <div className="flex flex-row justify-center pt-4 text-2xl">
-        {selectedCountries.length != 0 && (
-          <button
-            className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
-            onClick={downloadData}
-          >
-            Confirm download
-          </button>
         )}
       </div>
     </div>
