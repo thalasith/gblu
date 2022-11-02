@@ -38,7 +38,14 @@ export default function DownloadSection() {
     setActive(false);
     setSelectedCountries(countries!);
   };
-  console.log(selectedCountries);
+
+  const unselectAllCountries = () => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries([]);
+  };
+
   const downloadData = async () => {
     const data = await fetch("/api/exceldownload", {
       method: "POST",
@@ -88,7 +95,20 @@ export default function DownloadSection() {
           </ul>
         </div>
       </a>
-      <button onClick={selectAllCountries}>Select All Countries</button>
+      <div className="flex flex-row-reverse">
+        <button
+          className="m-2 rounded-md bg-gray-600 px-2 text-white hover:bg-slate-800"
+          onClick={unselectAllCountries}
+        >
+          Unselect All Countries
+        </button>
+        <button
+          className="m-2 rounded-md bg-gray-600 px-2 py-1 text-white hover:bg-slate-800"
+          onClick={selectAllCountries}
+        >
+          Select All Countries
+        </button>
+      </div>
       <div className="flex flex-row justify-center pt-4 text-2xl">
         {selectedCountries.length != 0 && (
           <button
@@ -110,7 +130,7 @@ export default function DownloadSection() {
           selectedCountries.map((country) => (
             <div
               key={country}
-              className="mx-1 my-2 flex flex-row justify-between rounded border-2 border-dashed border-gray-900 bg-gray-200 px-2 align-top"
+              className="mx-1 my-2 flex flex-row justify-between rounded border-2 border-dashed border-gray-900 bg-gray-200 p-2"
             >
               {country === "Ireland" ? (
                 <img
@@ -134,7 +154,7 @@ export default function DownloadSection() {
               ) : (
                 ""
               )}
-              <span className="pt-1">{country}</span>
+              <span className="">{country}</span>
 
               <button onClick={() => handleCountryDelete(country)}>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
