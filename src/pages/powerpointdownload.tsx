@@ -7,7 +7,7 @@ const Download: NextPage = () => {
   return (
     <>
       <Head>
-        <title>The Gowdie - Download to Excel</title>
+        <title>The Gowdie - Download to Powerpoint</title>
         <meta name="description" content="gary gowdie, gary, gowdie" />
         <link rel="icon" href="/gowdie.png" />
       </Head>

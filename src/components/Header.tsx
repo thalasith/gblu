@@ -27,6 +27,11 @@ export default function Header() {
                 Download to Excel
               </a>
             </Link>
+            <Link href="/powerpointdownload">
+              <a className="ml-2 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gray-600 py-1 px-2  text-base font-medium text-white shadow-sm hover:bg-gray-800 lg:px-4 lg:py-2">
+                Download to Powerpoint
+              </a>
+            </Link>
           </div>
         </div>
       </div>

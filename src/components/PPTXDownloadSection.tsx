@@ -14,6 +14,7 @@ export default function PPTXDownloadSection() {
   const { data: countries } = trpc.useQuery(["countries.getCountryList"]);
 
   const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(countries);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -40,6 +41,7 @@ export default function PPTXDownloadSection() {
   };
 
   const downloadData = async () => {
+    setLoading(true);
     const data = await fetch("/api/powerpointdownload", {
       method: "POST",
       body: JSON.stringify(selectedCountries),
@@ -50,8 +52,6 @@ export default function PPTXDownloadSection() {
     }).then((res) => {
       return res.json();
     });
-
-    console.log(data);
 
     const pptx = new pptxgen();
     data.forEach((countryData: any) => {
@@ -120,6 +120,7 @@ export default function PPTXDownloadSection() {
     });
 
     pptx.writeFile({ fileName: "gblu.pptx" });
+    setLoading(false);
   };
 
   return (
@@ -156,15 +157,24 @@ export default function PPTXDownloadSection() {
       </a>
       <div className="flex flex-row justify-center pt-4 text-2xl">
         {selectedCountries.length != 0 && (
-          <button
-            className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
-            onClick={downloadData}
-          >
-            Confirm download
-          </button>
+          <div className="flex flex-col items-center">
+            <button
+              className="rounded bg-gray-600 px-2 text-white hover:bg-gray-900"
+              onClick={downloadData}
+            >
+              Confirm download
+            </button>
+            <div
+              className={`flex flex-row items-center pt-2 ${
+                loading ? "inblock" : "hidden"
+              }`}
+            >
+              <img src="/loading.svg" alt="next" className="h-12 w-12 pr-2" />
+              Working on your request...
+            </div>
+          </div>
         )}
       </div>
-      <button onClick={downloadData}>Click Me for Powerpoint!</button>
       <div
         className={`grid ${
           selectedCountries.length != 0 ? "grid-cols-3" : ""
@@ -178,29 +188,9 @@ export default function PPTXDownloadSection() {
               key={country}
               className="mx-1 my-2 flex flex-row justify-between rounded border-2 border-dashed border-gray-900 bg-gray-200 p-2"
             >
-              {country === "Ireland" ? (
-                <img
-                  alt="alan"
-                  src="/alan.png"
-                  width="40"
-                  height="40"
-                  className="my-2"
-                />
-              ) : (
-                ""
-              )}
-              {country === "United Kingdom" ? (
-                <img
-                  alt="gary"
-                  src="/gowdie.png"
-                  width="40"
-                  height="40"
-                  className="my-2"
-                />
-              ) : (
-                ""
-              )}
-              <span className="">{country}</span>
+              <span className="">
+                {country.length > 21 ? country.slice(0, 21) + "..." : country}
+              </span>
 
               <button onClick={() => handleCountryDelete(country)}>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
