@@ -14,6 +14,7 @@ const Download: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(countries);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [showingAlert, setShowingAlert] = useState(false);
 
   const handleCountryChange = (e: ChangeEvent<HTMLElement>) => {
     const { value } = e.target as HTMLInputElement;
@@ -53,19 +54,24 @@ const Download: NextPage = () => {
   };
 
   const downloadData = async () => {
-    setLoading(true);
-    const data = await fetch("/api/exceldownload", {
-      method: "POST",
-      body: JSON.stringify(selectedCountries),
-      headers: {
-        "Content-Type": "application/json",
-        "Response-type": "blob",
-      },
-    }).then((res) => {
-      return res.blob();
-    });
-    FileSaver.saveAs(data, "data.xlsx");
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await fetch("/api/exceldownload", {
+        method: "POST",
+        body: JSON.stringify(selectedCountries),
+        headers: {
+          "Content-Type": "application/json",
+          "Response-type": "blob",
+        },
+      }).then((res) => {
+        return res.blob();
+      });
+      FileSaver.saveAs(data, "data.xlsx");
+      setLoading(false);
+      setShowingAlert(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -76,6 +82,22 @@ const Download: NextPage = () => {
         <link rel="icon" href="/gowdie.png" />
       </Head>
       <Header />
+      <div
+        className={`grid justify-items-center pt-6 transition-all delay-500 duration-1000 ease-linear ${
+          showingAlert ? "opacity-100" : "opacity-0"
+        }`}
+        onTransitionEnd={() => setShowingAlert(false)}
+      >
+        <div
+          className="relative w-1/2 rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700"
+          role="alert"
+        >
+          <strong className="font-bold">Your download is complete! </strong>
+          <span className="block sm:inline">
+            You should check your downloads folder.
+          </span>
+        </div>
+      </div>
       <DownloadSection
         downloadType="Excel"
         setActive={setActive}
