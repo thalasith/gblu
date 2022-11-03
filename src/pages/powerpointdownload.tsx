@@ -1,9 +1,144 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Header from "../components/Header";
-import PPTXDownloadSection from "../components/PPTXDownloadSection";
+import DownloadSection from "../components/DownloadSection";
+import { useState, ChangeEvent } from "react";
+import { trpc } from "../utils/trpc";
+import pptxgen from "pptxgenjs";
 
+const tableHeader = {
+  align: "left",
+  fontFace: "Arial",
+  fill: { color: "002C76" },
+  color: "FFFFFF",
+};
 const Download: NextPage = () => {
+  const { data: countries } = trpc.useQuery(["countries.getCountryList"]);
+
+  const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState(countries);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
+  const handleCountryChange = (e: ChangeEvent<HTMLElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setSearchTerm(value);
+    setSearchResults(
+      countries!.filter((country) => {
+        return country.toLowerCase().includes(value.toLowerCase());
+      })
+    );
+  };
+
+  const handleCountryDelete = (country: string) => {
+    setSelectedCountries(selectedCountries.filter((c) => c !== country));
+  };
+
+  const selectCountry = (country: string) => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries([...selectedCountries, country]);
+  };
+
+  const selectAllCountries = () => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries(countries!);
+  };
+
+  const unselectAllCountries = () => {
+    setSearchTerm("");
+    setSearchResults(countries);
+    setActive(false);
+    setSelectedCountries([]);
+  };
+
+  const downloadData = async () => {
+    setLoading(true);
+    const data = await fetch("/api/powerpointdownload", {
+      method: "POST",
+      body: JSON.stringify(selectedCountries),
+      headers: {
+        "Content-Type": "application/json",
+        "Response-type": "blob",
+      },
+    }).then((res) => {
+      return res.json();
+    });
+
+    const pptx = new pptxgen();
+    data.forEach((countryData: any) => {
+      const title = [
+        {
+          text: "GBLU Updates",
+          options: { fontSize: 28, color: "002C76", breakLine: true },
+        },
+        {
+          text: countryData.country,
+          options: { fontSize: 24, color: "808080", breakLine: true },
+        },
+      ];
+      countryData.data.forEach((slideData: any) => {
+        const slide = pptx.addSlide();
+        slide.addText(title, {
+          x: 0.25,
+          y: 0.4,
+          w: 5,
+          h: "10%",
+          fontSize: 28,
+          bold: true,
+          color: "002C76",
+          fontFace: "Times New Roman",
+          align: "left",
+        });
+
+        slide.addImage({
+          x: "80%",
+          y: "7.5%",
+          w: 1,
+          h: 0.66,
+          path: `https://countryflagsapi.com/png/${countryData.countryCode}`,
+        });
+
+        const rows: any[] = [];
+        rows.push([
+          {
+            text: "Benefit",
+            options: tableHeader,
+          },
+          { text: "Effective Date", options: tableHeader },
+          { text: "New Law", options: tableHeader },
+          {
+            text: "Description of the Law",
+            options: tableHeader,
+          },
+          {
+            text: "Action Required",
+            options: tableHeader,
+          },
+        ]);
+
+        slideData.data.forEach((row: any[]) => {
+          rows.push(row);
+        });
+        slide.addTable(rows, {
+          x: 0.25,
+          y: "20%",
+          align: "left",
+          fontFace: "Arial",
+          fontSize: 8,
+          colW: [1, 1, 1.25, 4.5, 1.5],
+        });
+      });
+    });
+
+    pptx.writeFile({ fileName: "gblu.pptx" });
+    setLoading(false);
+  };
+
   return (
     <>
       <Head>
@@ -12,7 +147,20 @@ const Download: NextPage = () => {
         <link rel="icon" href="/gowdie.png" />
       </Head>
       <Header />
-      <PPTXDownloadSection />
+      <DownloadSection
+        setActive={setActive}
+        active={active}
+        loading={loading}
+        downloadData={downloadData}
+        searchTerm={searchTerm}
+        searchResults={searchResults}
+        handleCountryChange={handleCountryChange}
+        selectCountry={selectCountry}
+        selectAllCountries={selectAllCountries}
+        unselectAllCountries={unselectAllCountries}
+        selectedCountries={selectedCountries}
+        handleCountryDelete={handleCountryDelete}
+      />
     </>
   );
 };
