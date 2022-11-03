@@ -1,6 +1,24 @@
+import { ChangeEvent } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-export default function ExcelDownloadSection({
+type Props = {
+  downloadType: string;
+  setActive: (active: boolean) => void;
+  active: boolean;
+  loading: boolean;
+  downloadData: () => void;
+  searchTerm: string;
+  searchResults: string[];
+  handleCountryChange: (e: ChangeEvent<HTMLElement>) => void;
+  selectCountry: (country: string) => void;
+  selectAllCountries: () => void;
+  unselectAllCountries: () => void;
+  selectedCountries: string[];
+  handleCountryDelete: (country: string) => void;
+};
+
+export default function DownloadSection({
+  downloadType,
   setActive,
   active,
   loading,
@@ -13,11 +31,11 @@ export default function ExcelDownloadSection({
   unselectAllCountries,
   selectedCountries,
   handleCountryDelete,
-}: any) {
+}: Props) {
   return (
     <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
       <div className="mx-4 flex border-b-2  pb-2 pt-4 text-2xl lg:text-4xl">
-        GBLU Download to Excel
+        GBLU Download to {downloadType}
       </div>
       <a className="px-4 pt-4 text-2xl" onFocus={() => setActive(true)}>
         <label className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">

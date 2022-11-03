@@ -77,12 +77,13 @@ const Download: NextPage = () => {
       </Head>
       <Header />
       <DownloadSection
+        downloadType="Excel"
         setActive={setActive}
         active={active}
         loading={loading}
         downloadData={downloadData}
         searchTerm={searchTerm}
-        searchResults={searchResults}
+        searchResults={searchResults ?? []}
         handleCountryChange={handleCountryChange}
         selectCountry={selectCountry}
         selectAllCountries={selectAllCountries}

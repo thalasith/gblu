@@ -12,6 +12,28 @@ const tableHeader = {
   fill: { color: "002C76" },
   color: "FFFFFF",
 };
+
+type slide = {
+  slide: number;
+  data: string[][];
+};
+
+type countrySlidesType = {
+  country: string;
+  data: slide[];
+  countryCode: string;
+};
+
+type rowData = {
+  text: string;
+  options: {
+    align: string;
+    fontFace: string;
+    fill: { color: string };
+    color: string;
+  };
+}[];
+
 const Download: NextPage = () => {
   const { data: countries } = trpc.useQuery(["countries.getCountryList"]);
 
@@ -70,7 +92,8 @@ const Download: NextPage = () => {
     });
 
     const pptx = new pptxgen();
-    data.forEach((countryData: any) => {
+
+    data.forEach((countryData: countrySlidesType) => {
       const title = [
         {
           text: "GBLU Updates",
@@ -81,7 +104,7 @@ const Download: NextPage = () => {
           options: { fontSize: 24, color: "808080", breakLine: true },
         },
       ];
-      countryData.data.forEach((slideData: any) => {
+      countryData.data.forEach((slideData: slide) => {
         const slide = pptx.addSlide();
         slide.addText(title, {
           x: 0.25,
@@ -148,12 +171,13 @@ const Download: NextPage = () => {
       </Head>
       <Header />
       <DownloadSection
+        downloadType="Powerpoint"
         setActive={setActive}
         active={active}
         loading={loading}
         downloadData={downloadData}
         searchTerm={searchTerm}
-        searchResults={searchResults}
+        searchResults={searchResults ?? []}
         handleCountryChange={handleCountryChange}
         selectCountry={selectCountry}
         selectAllCountries={selectAllCountries}

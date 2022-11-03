@@ -21,17 +21,34 @@ const getRowMaximums = (data: string[][]) => {
   return rowMaximums;
 };
 
-const onlyUnique = (value: string, index: number, self: any) => {
+const onlyUnique = (value: number, index: number, self: number[]) => {
   return self.indexOf(value) === index;
 };
 
+type rawDataType = {
+  country: string;
+  data: string[][];
+  countryCode: string;
+};
+
+type slide = {
+  slide: number;
+  data: string[][];
+};
+
+type countrySlidesType = {
+  country: string;
+  data: slide[];
+  countryCode: string;
+};
+
 // Return array of which row to start on for each slide
-const sortRowsIntoSlides = (data: any[]) => {
-  const countrySlides: any[] = [];
+const sortRowsIntoSlides = (data: rawDataType[]) => {
+  const countrySlides: countrySlidesType[] = [];
   data.forEach((country) => {
     const rowMaximums = getRowMaximums(country.data);
 
-    const slideStarts: any[] = [];
+    const slideStarts: number[] = [];
     let sumOfRows = 0;
     let slideNumber = 1;
     rowMaximums.forEach((row, index) => {
@@ -44,8 +61,9 @@ const sortRowsIntoSlides = (data: any[]) => {
         slideStarts.push(slideNumber);
       }
     });
+
     const unique = slideStarts.filter(onlyUnique);
-    const slideData: any[] = [];
+    const slideData: slide[] = [];
     unique.forEach((slide) => {
       slideData.push({ slide: slide, data: [] });
     });
@@ -53,7 +71,7 @@ const sortRowsIntoSlides = (data: any[]) => {
     slideStarts.forEach((row, index) => {
       slideData.forEach((slide) => {
         if (slide.slide === row) {
-          slide.data.push(country.data[index]);
+          slide.data.push(country.data[index] ?? []);
         }
       });
     });
@@ -72,7 +90,7 @@ const powerpointDownload = async (
   res: NextApiResponse
 ) => {
   const query = [];
-  const countryResults: any[] = [];
+  const countryResults: rawDataType[] = [];
   for (const country of req.body) {
     const countryCode = await prisma.countries.findFirst({
       where: { country: country },
@@ -81,7 +99,7 @@ const powerpointDownload = async (
     countryResults.push({
       country: country,
       data: [],
-      countryCode: countryCode?.country_code,
+      countryCode: countryCode!.country_code,
     });
   }
   const results = await prisma.gblu.findMany({
