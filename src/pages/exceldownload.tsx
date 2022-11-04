@@ -82,37 +82,39 @@ const Download: NextPage = () => {
         <link rel="icon" href="/gowdie.png" />
       </Head>
       <Header />
-      <div
-        className={`grid justify-items-center pt-6 transition-all delay-500 duration-1000 ease-linear ${
-          showingAlert ? "opacity-100" : "opacity-0"
-        }`}
-        onTransitionEnd={() => setShowingAlert(false)}
-      >
+      <div className="relative">
         <div
-          className="relative w-1/2 rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700"
-          role="alert"
+          className={`absolute z-50 grid w-full justify-items-center pt-6 transition-all delay-500 duration-1000 ease-linear ${
+            showingAlert ? "opacity-100" : "opacity-0"
+          }`}
+          onTransitionEnd={() => setShowingAlert(false)}
         >
-          <strong className="font-bold">Your download is complete! </strong>
-          <span className="block sm:inline">
-            You should check your downloads folder.
-          </span>
+          <div
+            className="relative w-1/2 rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700"
+            role="alert"
+          >
+            <strong className="font-bold">Your download is complete! </strong>
+            <span className="block sm:inline">
+              You should check your downloads folder.
+            </span>
+          </div>
         </div>
+        <DownloadSection
+          downloadType="Excel"
+          setActive={setActive}
+          active={active}
+          loading={loading}
+          downloadData={downloadData}
+          searchTerm={searchTerm}
+          searchResults={searchResults ?? []}
+          handleCountryChange={handleCountryChange}
+          selectCountry={selectCountry}
+          selectAllCountries={selectAllCountries}
+          unselectAllCountries={unselectAllCountries}
+          selectedCountries={selectedCountries}
+          handleCountryDelete={handleCountryDelete}
+        />
       </div>
-      <DownloadSection
-        downloadType="Excel"
-        setActive={setActive}
-        active={active}
-        loading={loading}
-        downloadData={downloadData}
-        searchTerm={searchTerm}
-        searchResults={searchResults ?? []}
-        handleCountryChange={handleCountryChange}
-        selectCountry={selectCountry}
-        selectAllCountries={selectAllCountries}
-        unselectAllCountries={unselectAllCountries}
-        selectedCountries={selectedCountries}
-        handleCountryDelete={handleCountryDelete}
-      />
     </>
   );
 };
